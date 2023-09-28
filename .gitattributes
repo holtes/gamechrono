@@ -1,0 +1,117 @@
+*                                       text=auto
+#{   Текстовые файлы
+##{   Unity
+*.shader                                text
+*.mat                                   text eol=lf                                                 merge=unityyamlmerge
+*.anim                                  text eol=lf                                                 merge=unityyamlmerge
+*.unity                                 text eol=lf                                                 merge=unityyamlmerge
+*.prefab                                text eol=lf                                                 merge=unityyamlmerge
+*.meta                                  text eol=lf                                                 merge=unityyamlmerge
+*.controller                            text eol=lf                                                 merge=unityyamlmerge
+*.physicMaterial2D                      text eol=lf                                                 merge=unityyamlmerge
+*.physicMaterial                        text eol=lf                                                 merge=unityyamlmerge
+*.physicsMaterial2D                     text eol=lf                                                 merge=unityyamlmerge
+*.physicsMaterial                       text eol=lf                                                 merge=unityyamlmerge
+##}
+##{   Программирование
+*.cs                                    text                                    diff=csharp
+*.cginc                                 text
+##}
+#}
+#{   Двоичные файлы
+*.cubemap                               -text               filter=lfs          diff=lfs            merge=lfs
+*.unitypackage                          -text               filter=lfs          diff=lfs            merge=lfs
+[Ll]ighting*[Dd]ata.asset               -text               filter=lfs          diff=lfs            merge=lfs
+##{   3D-модели
+*.3dm                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.3ds                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.blend                                	-text               filter=lfs          diff=lfs            merge=lfs
+*.c4d                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.collada                              	-text               filter=lfs          diff=lfs            merge=lfs
+*.dae                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.dxf                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.FBX                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.fbx                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.jas                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.lws                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.lxo                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.ma                                   	-text               filter=lfs          diff=lfs            merge=lfs
+*.max                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.mb                                   	-text               filter=lfs          diff=lfs            merge=lfs
+*.obj                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.ply                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.skp                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.stl                                  	-text               filter=lfs          diff=lfs            merge=lfs
+*.ztl                                  	-text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Изображения
+*.bmp                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.exr                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.gif                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.hdr                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.iff                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.jpeg                                  -text               filter=lfs          diff=lfs            merge=lfs
+*.jpg                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.pict                                  -text               filter=lfs          diff=lfs            merge=lfs
+*.png                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.psd                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.tga                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.tif                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.tiff                                  -text               filter=lfs          diff=lfs            merge=lfs
+*.webp                                  -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Аудио
+*.aif                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.aiff                                  -text               filter=lfs          diff=lfs            merge=lfs
+*.it                                    -text               filter=lfs          diff=lfs            merge=lfs
+*.mod                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.mp3                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.ogg                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.s3m                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.wav                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.xm                                    -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Видео
+*.asf                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.avi                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.flv                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.mov                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.mp4                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.mpeg                                  -text               filter=lfs          diff=lfs            merge=lfs
+*.mpg                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.ogv                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.wmv                                   -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Архивы
+*.7z                                    -text               filter=lfs          diff=lfs            merge=lfs
+*.bz2                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.gz                                    -text               filter=lfs          diff=lfs            merge=lfs
+*.rar                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.tar                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.zip                                   -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Библиотеки
+*.dll                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.pdb                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.so                                    -text               filter=lfs          diff=lfs            merge=lfs
+*.jar                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.aar                                   -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Щрифты
+*.otf                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.ttf                                   -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Исполняемые файлы
+*.apk                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.exe                                   -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Документы
+*.pdf                                   -text               filter=lfs          diff=lfs            merge=lfs
+##}
+##{   Другое
+*.dat                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.a                                     -text               filter=lfs          diff=lfs            merge=lfs
+*.rns                                   -text               filter=lfs          diff=lfs            merge=lfs
+*.reason                                -text               filter=lfs          diff=lfs            merge=lfs
+##}
+#}

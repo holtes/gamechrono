@@ -1,0 +1,88 @@
+#{	Unity
+/[Ll]ibrary/
+/[Ll]ogs/
+/[Mm]emory[Cc]aptures/
+/[Ss]treaming[Aa]ssets/[Pp]hoto/
+/[Ss]treaming[Aa]ssets/[Vv]ideo/
+/[Tt]emp/
+/[Uu]ser[Ss]ettings/
+
+##{	Мета-файлы
+!*.meta
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+##}
+
+##{	Отчеты
+sysinfo.txt
+crashlytics-build.properties
+##}
+
+##{	Специальные файлы ресурсов
+/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/**/*.bin*
+#/[Aa]ssets/[Aa]sset[Ss]tore[Tt]ools*
+/[Aa]ssets/[Ss]treamingAssets/aa.meta
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+##}
+#}
+
+
+
+#{	Выходные файлы
+*.apk
+*.aab
+*.unitypackage
+*.app
+#}
+
+
+#{	Программирование
+[Ee]xported[Oo]bj/
+/[Oo]bj/
+*.sln
+*.csproj
+*.unityproj
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+##{ Visual Studio
+.vs/
+.vsconfig
+##}
+
+##{	JetBrains
+/[Aa]ssets/[Pp]lugins/[Ee]ditor/[Jj]et[Bb]rains*
+.idea/
+.idea_modules/
+##}
+
+##{	Visual Studio Code
+.vscode/
+.history/
+*.vsix
+##}
+
+##{	xCode
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+##}
+
+##{	Consulo
+.consulo/
+##}
+
+##{ Gradle
+.gradle/
+##}
+#}
