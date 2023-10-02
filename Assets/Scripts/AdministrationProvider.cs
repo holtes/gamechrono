@@ -14,15 +14,20 @@ public class AdministrationProvider : MonoBehaviour
     private JSONNode langNode = null;
     private JSONNode panelNode = null;
     private string curLang;
+    private string curLangPins;
     private string _currentTable;
     public Color color;
 
     [SerializeField]
     private Transform tabel;
     [SerializeField]
+    private GameObject _headerPinsPref;
+    [SerializeField]
     private GameObject tabelRowPref;
     [SerializeField]
     private GameObject _tableNamePref;
+    [SerializeField]
+    private GameObject _tabelRowPinPref;
     [SerializeField]
     private TMP_Text topText;
     [SerializeField]
@@ -36,7 +41,14 @@ public class AdministrationProvider : MonoBehaviour
     [SerializeField]
     private PanelBtn[] _panelBtns;
 
+    private string[,] csvGrid;
     private string _streamingAssetsPath;
+    private Dictionary<string, int> _pinsTypesDict = new Dictionary<string, int>()
+    {
+        {"componentsSupplier", 0},
+        {"materialsSupplier", 1},
+        {"manufacturingFactory", 2}
+    };
 
     [SerializeField]
     private bool _isDebug = false;
@@ -56,6 +68,9 @@ public class AdministrationProvider : MonoBehaviour
         Debug.Log(baseNode);
         langNode = baseNode["language_1"];
         curLang = "language_1";
+        curLangPins = "Lang1";
+        string contents = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "MapPoints_" + curLangPins + ".csv"));
+        csvGrid = CSVReader.SplitCsvGrid(contents);
         foreach (PanelBtn panelBtn in _panelBtns)
         {
             panelBtn.switchToggle(langNode["PanelsActived"][panelBtn._panelKey].AsBool);
@@ -79,8 +94,49 @@ public class AdministrationProvider : MonoBehaviour
             panelNode = langNode[panelKey];
             if (panelKey == "Airplanes") localizeAircrafts(panelNode);
             else if (panelKey == "Technologies") localizeTechologies(panelNode);
+            else if (panelKey == "Pins") localizePins();
             else setLocalizeRows(panelNode);
         }
+    }
+
+    private void localizePins()
+    {
+        GameObject header = Instantiate(_headerPinsPref, tabel);
+        tabelRows.Add(header);
+        for (int i = 1; i < csvGrid.GetLength(1) - 1; i++)
+        {
+            if (!_pinsTypesDict.ContainsKey(csvGrid[1, i])) continue;
+            GameObject rowPinInfo = Instantiate(_tabelRowPinPref, tabel);
+            TabelRowPin tabelRowPin = rowPinInfo.GetComponent<TabelRowPin>();
+            tabelRowPin.id = i;
+            tabelRowPin.name.text = csvGrid[0, i];
+            tabelRowPin.name.onEndEdit.AddListener(delegate { changeValuePin(tabelRowPin.id, 0, tabelRowPin.name); });
+            tabelRowPin.type.value = _pinsTypesDict[csvGrid[1, i]];
+            tabelRowPin.type.onValueChanged.AddListener(delegate { changeValuePin(tabelRowPin.id, 1, tabelRowPin.type); });
+            tabelRowPin.lon.text = csvGrid[2, i];
+            tabelRowPin.lon.onEndEdit.AddListener(delegate { changeValuePin(tabelRowPin.id, 2, tabelRowPin.lon); });
+            tabelRowPin.lat.text = csvGrid[3, i];
+            tabelRowPin.lat.onEndEdit.AddListener(delegate { changeValuePin(tabelRowPin.id, 3, tabelRowPin.lat); });
+            tabelRowPin.description.text = csvGrid[4, i];
+            tabelRowPin.description.onEndEdit.AddListener(delegate { changeValuePin(tabelRowPin.id, 4, tabelRowPin.description); });
+            tabelRowPin.location.text = csvGrid[5, i];
+            tabelRowPin.location.onEndEdit.AddListener(delegate { changeValuePin(tabelRowPin.id, 5, tabelRowPin.location); });
+            tabelRows.Add(rowPinInfo);
+        }
+    }
+
+    private void changeValuePin(int row, int col, TMP_InputField item)
+    {
+        csvGrid[col, row] = item.text;
+        Debug.Log(col + " " + row);
+        saveCSV();
+    }
+
+    private void changeValuePin(int row, int col, TMP_Dropdown item)
+    {
+        csvGrid[col, row] = item.options[item.value].text;
+        Debug.Log(col + " " + row);
+        saveCSV();
     }
 
     private void localizeAircrafts(JSONNode node)
@@ -94,6 +150,7 @@ public class AdministrationProvider : MonoBehaviour
             tabelName.blockName.text = node[i]["MozaicCard"]["ModelName"];
             tabelName.toggle.isOn = node[i]["enabled"].AsBool;
             tabelName.toggle.onValueChanged.AddListener((bool state) => { changeAircraftEnabled(state, tabelName.id); });
+            tabelName.addDescription.onClick.AddListener(delegate { addDescription(tabelName.id); });
             tabelRows.Add(rowName);
             setLocalizeRows(node[i]);
         }
@@ -132,6 +189,16 @@ public class AdministrationProvider : MonoBehaviour
         }
     }
 
+    private void addDescription(int aircraftInd)
+    {
+        JSONNode lang1Node = baseNode["language_1"]["Airplanes"][aircraftInd]["PersonalPage"]["SmallDescriptions"];
+        JSONNode lang2Node = baseNode["language_2"]["Airplanes"][aircraftInd]["PersonalPage"]["SmallDescriptions"];
+        JSONNode sampleNode = JSONNode.Parse("{ \"Titl\": \"\", \"Description\": \"\" }");
+        lang1Node.Add("SmallDescriptions", sampleNode);
+        lang2Node.Add("SmallDescriptions", sampleNode);
+        saveJson();
+        setLocalizationTabel(_currentTable);
+    }
     private void changeValue(TabelRow tabelRow)
     {
         tabelRow.node.Value = tabelRow.inputField.text;
@@ -142,13 +209,30 @@ public class AdministrationProvider : MonoBehaviour
     {
         baseNode["language_1"]["Airplanes"][aircraftInd]["enabled"].AsBool = state;
         baseNode["language_2"]["Airplanes"][aircraftInd]["enabled"].AsBool = state;
-        Debug.Log(aircraftInd);
         saveJson();
     }
 
     private void saveJson()
     {
         File.WriteAllText(Path.Combine(_streamingAssetsPath, fileName + ".json"), baseNode.ToString());
+    }
+
+    private void saveCSV()
+    {
+        string content = "";
+        for (int i = 0; i < csvGrid.GetLength(1) - 1; i++)
+        {
+            string row = "";
+            for (int j = 0; j < 6; j++)
+            {
+                if (j != 5) row += csvGrid[j, i] + ",";
+                else row += csvGrid[j, i];
+                Debug.Log(csvGrid[j, i]);
+            }
+            if (csvGrid.GetLength(1) - 2 != i) row += "\n";
+            content += row;
+        }
+        File.WriteAllText(Path.Combine(Application.streamingAssetsPath, "MapPoints_" + curLangPins + ".csv"), content);
     }
 
     public void changeLang()
@@ -158,13 +242,17 @@ public class AdministrationProvider : MonoBehaviour
             topText.text = "Редактировние русской версии";
             topTagText.text = "EN";
             curLang = "language_1";
+            curLangPins = "Lang1";
         }
         else
         {
             topText.text = "Редактировние английской версии";
             topTagText.text = "RU";
             curLang = "language_2";
+            curLangPins = "Lang2";
         }
+        string contents = File.ReadAllText(Path.Combine(Application.streamingAssetsPath, "MapPoints_" + curLangPins + ".csv"));
+        csvGrid = CSVReader.SplitCsvGrid(contents);
         langNode = baseNode[curLang];
         setLocalizationTabel(_currentTable);
     }
