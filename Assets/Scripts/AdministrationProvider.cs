@@ -76,7 +76,7 @@ public class AdministrationProvider : MonoBehaviour
             panelBtn.switchToggle(langNode["PanelsActived"][panelBtn._panelKey].AsBool);
         }
         PanelBtn.onToggleSwitched += setPanelActive;
-        
+        setLocalizationTabel("StandBy");
     }
 
     public void setLocalizationTabel(string key)
@@ -150,7 +150,10 @@ public class AdministrationProvider : MonoBehaviour
             tabelName.blockName.text = node[i]["MozaicCard"]["ModelName"];
             tabelName.toggle.isOn = node[i]["enabled"].AsBool;
             tabelName.toggle.onValueChanged.AddListener((bool state) => { changeAircraftEnabled(state, tabelName.id); });
-            tabelName.addDescription.onClick.AddListener(delegate { addDescription(tabelName.id); });
+            tabelName.aircraftEditTab.editBtn.onClick.AddListener(delegate { editTab(tabelName.id, tabelName.aircraftEditTab); });
+            tabelName.aircraftEditTab._options.onValueChanged.AddListener((int index) => {
+                setOptionsNum(index, tabelName.id, tabelName.aircraftEditTab);
+            });
             tabelRows.Add(rowName);
             setLocalizeRows(node[i]);
         }
@@ -189,15 +192,70 @@ public class AdministrationProvider : MonoBehaviour
         }
     }
 
-    private void addDescription(int aircraftInd)
+    private void editTab(int aircraftInd, AircraftEditTab aircraftEditTab)
     {
-        JSONNode lang1Node = baseNode["language_1"]["Airplanes"][aircraftInd]["PersonalPage"]["SmallDescriptions"];
-        JSONNode lang2Node = baseNode["language_2"]["Airplanes"][aircraftInd]["PersonalPage"]["SmallDescriptions"];
-        JSONNode sampleNode = JSONNode.Parse("{ \"Titl\": \"\", \"Description\": \"\" }");
-        lang1Node.Add("SmallDescriptions", sampleNode);
-        lang2Node.Add("SmallDescriptions", sampleNode);
+        JSONNode lang1Node = baseNode["language_1"]["Airplanes"][aircraftInd];
+        JSONNode lang2Node = baseNode["language_2"]["Airplanes"][aircraftInd];
+        string sample;
+        switch (aircraftEditTab.optionNum)
+        {
+            case 0:
+                sample = "{ \"Titl\": \"\", \"Description\": \"\" }";
+                addParam(lang1Node, lang2Node, "SmallDescriptions", sample);
+                break;
+            case 1:
+                deleteParam(lang1Node, lang2Node, "SmallDescriptions", aircraftEditTab.itemNumber);
+                break;
+            case 2:
+                sample = "{ \"Label\": \"\", \"Value\": \"\" }";
+                addParam(lang1Node, lang2Node, "FlyParameters", sample);
+                break;
+            case 3:
+                deleteParam(lang1Node, lang2Node, "FlyParameters", aircraftEditTab.itemNumber);
+                break;
+            case 4:
+                sample = "{ \"Label\": \"\", \"Parameters\": [ { \"Label\": \"\", \"Value\": \"\" } ] }";
+                addParam(lang1Node, lang2Node, "ArmySections", sample);
+                break;
+            case 5:
+                deleteParam(lang1Node, lang2Node, "ArmySections", aircraftEditTab.itemNumber);
+                break;
+        }
         saveJson();
         setLocalizationTabel(_currentTable);
+    }
+
+    private void deleteParam(JSONNode lang1Node, JSONNode lang2Node, string param, int index)
+    {
+        JSONArray param1Node = lang1Node["PersonalPage"][param].AsArray;
+        JSONArray param2Node = lang2Node["PersonalPage"][param].AsArray;
+        param1Node.Remove(index);
+        param2Node.Remove(index);
+    }
+
+    private void addParam(JSONNode lang1Node, JSONNode lang2Node, string param, string sampleStr)
+    {
+        lang1Node = lang1Node["PersonalPage"][param];
+        lang2Node = lang2Node["PersonalPage"][param];
+        JSONNode sampleNode = JSONNode.Parse(sampleStr);
+        lang1Node.Add(param, sampleNode);
+        lang2Node.Add(param, sampleNode);
+    }
+
+    private void setOptionsNum(int index, int aircraftInd, AircraftEditTab aircraftEditTab)
+    {
+        switch(index)
+        {
+            case 1:
+                aircraftEditTab.setItemNumOptions(langNode["Airplanes"][aircraftInd]["PersonalPage"]["SmallDescriptions"].Count);
+                break;
+            case 3:
+                aircraftEditTab.setItemNumOptions(langNode["Airplanes"][aircraftInd]["PersonalPage"]["FlyParameters"].Count);
+                break;
+            case 5:
+                aircraftEditTab.setItemNumOptions(langNode["Airplanes"][aircraftInd]["PersonalPage"]["ArmySections"].Count);
+                break;
+        }
     }
     private void changeValue(TabelRow tabelRow)
     {

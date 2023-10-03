@@ -8,6 +8,6 @@ public class TableName : MonoBehaviour
 {
     public TMP_Text blockName;
     public Toggle toggle;
-    public Button addDescription;
+    public AircraftEditTab aircraftEditTab;
     public int id;
 }
